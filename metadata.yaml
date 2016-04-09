@@ -1,0 +1,38 @@
+_repo: The-Importance-of-Being-Earnest-A-Trivial-Comedy-for-Serious-People_844
+_version: 0.0.1
+creator:
+  author:
+    agent_name: Wilde, Oscar
+    alias: Wilde, Oscar Fingal O'Flahertie Wills
+    birthdate: 1854
+    deathdate: 1900
+    gutenberg_agent_id: '111'
+    url: http://www.gutenberg.org/2009/agents/111
+    wikipedia:
+    - http://en.wikipedia.org/wiki/Oscar_Wilde
+    - http://fr.wikipedia.org/wiki/Oscar_Wilde
+description: A universal favorite, <i>The Importance of Being Earnest</i>  displays
+  Oscar Wilde's theatrical genius at its brilliant best.  Subtitled "A Trivial Comedy
+  for Serious People", this hilarious attack  on Victorian manners and morals turns
+  a pompous world on its head, lets  duplicity lead to happiness, and makes riposte
+  the highest form of art.  Also included in this special collection are Wilde's first
+  comedy  success, <i>Lady Windermere's Fan</i>, and his richly sensual  melodrama,
+  <i>Salome</i>.
+gutenberg_bookshelf: Plays
+gutenberg_issued: '1997-03-01'
+gutenberg_type: Text
+identifiers:
+  gutenberg: '844'
+language: en
+publisher: Project Gutenberg
+rights: Public domain in the USA.
+rights_url: http://creativecommons.org/about/pdm
+subjects:
+- !lcc 'PR'
+- !lcsh 'Identity (Psychology) -- Drama'
+- !lcsh 'Comedies'
+- !lcsh 'Foundlings -- Drama'
+- !lcsh 'England -- Drama'
+- GITenberg
+title: 'The Importance of Being Earnest: A Trivial Comedy for Serious People'
+url: http://www.gutenberg.org/ebooks/844
