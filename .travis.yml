@@ -1,0 +1,59 @@
+sudo: required
+dist: trusty
+language: ruby
+
+before_install:
+- gem install asciidoctor -v 1.5.2 
+- gem install tilt
+- sudo pip install git+https://github.com/rdhyee/ebooklib.git
+script:
+- VERSION=`ruby -e "require 'yaml'; meta = YAML.load_file('metadata.yaml'); puts meta['_version'];"`
+- git clone https://github.com/gitenberg-dev/asciidoctor-htmlbook.git
+
+- sudo pip install -r asciidoctor-htmlbook/gitberg-machine/requirements.txt
+- asciidoctor -a toc,idprefix=xx_,version=$VERSION -b xhtml5 -T ./asciidoctor-htmlbook/htmlbook-autogen/
+  -d book book.asciidoc -o book.html
+- git clone https://github.com/gitenberg-dev/HTMLBook
+
+# make book.html available to jinja2 environment by putting it into templates
+- cp book.html asciidoctor-htmlbook/gitberg-machine/templates/
+
+- /usr/bin/python asciidoctor-htmlbook/gitberg-machine/machine.py -o . -m metadata.yaml book.html
+- xsltproc -stringparam external.assets.list " " ./HTMLBook/htmlbook-xsl/epub.xsl book.html
+- cp ./HTMLBook/stylesheets/epub/epub.css OEBPS
+- if [ -e cover.jpg ]; then cp cover.jpg OEBPS/cover.jpg; fi
+# look for first images directory and one found, copy over to ./OEBPS
+- find . -name images -type d | head -n 1 | xargs -I {} mv {} ./OEBPS/
+- zip -rX book.epub mimetype
+- zip -rX book.epub OEBPS/ META-INF/
+- if test -d "OEBPS/images/"; then zip -rX book.epub OEBPS/images/ ;fi
+- mv book.epub The-Importance-of-Being-Earnest-A-Trivial-Comedy-for-Serious-People.epub
+- ebook-convert The-Importance-of-Being-Earnest-A-Trivial-Comedy-for-Serious-People.epub The-Importance-of-Being-Earnest-A-Trivial-Comedy-for-Serious-People.mobi
+- xvfb-run ebook-convert The-Importance-of-Being-Earnest-A-Trivial-Comedy-for-Serious-People.epub The-Importance-of-Being-Earnest-A-Trivial-Comedy-for-Serious-People.pdf
+branches:
+  only:
+  - master
+notifications:
+  webhooks:
+    urls:
+      - https://unglue.it/api/travisci/webhook
+    on_success: always
+    on_failure: never
+    on_start: never
+deploy:
+  skip_cleanup: true
+  provider: releases
+  api_key:
+    secure: r8XlZmlm5WRFOQ33okGFO8fUGs79C6O0mMKJL1LTJd2UREQi4g3hNRUP6RqcrfubsytbizqW6JMqC77Y/ov4eAdQq0nasohqHl2EPoYvy4SIlmhDjw7R6JU1b5EI8GYHPBEYVDNuL2CdUE8nY812Zl9XrmkgAF0Pga6vputtNPPkDNemuVqd/nuZ7bXnXlSvvWRsN1T9e29JgVzljLIgCBWIgJ8TeKirb7OEB6Tp0ZZOwjMK/OOMpKfLNZvZnr4YB/fg0UgNqQZ5ghNo4QjWLRWXVA2lgNeMvScqFjltaHBbu4of1A73XdMxLvlzlQl3/FcC/X0QlZqN8A9nQXibSRp7nVtPHOb9DnbehLNCsDO3NGR+Z0YlCLDjKhAMu8Y26VJNrU45vOBIswHVlgSu0mib7s5zCKZygCpazSLcXt8uBh9QPTqh9W0OiAfnBXY1zrwNHePxGvMfNBUU+/G4QFMAFpIog2bMQ4mq5BjPNmUVpm4H4z0BuBMWW3ZljsxzzKa9C9jwzkaTbGJKTOePNC2pEvgg0I51hiZnPEEW7IErc6gfcsnH0KZ1caoi6fgTC9uP8OMxc3S8pGPP06ue2Gu+2vdyDLIWG8J1Aq/2k4Mc18iDFvCACgHnafXNCruozETXei3n6yqOvifm0vH/WfnSGKKi+yRCRzvBwG22WiM=
+  file:
+    - The-Importance-of-Being-Earnest-A-Trivial-Comedy-for-Serious-People.epub
+    - The-Importance-of-Being-Earnest-A-Trivial-Comedy-for-Serious-People.mobi
+    - The-Importance-of-Being-Earnest-A-Trivial-Comedy-for-Serious-People.pdf
+  "on":
+    repo: GITenberg/The-Importance-of-Being-Earnest-A-Trivial-Comedy-for-Serious-People_844
+addons:
+  apt:
+    packages:
+    - xsltproc
+    - xvfb
+    - calibre
