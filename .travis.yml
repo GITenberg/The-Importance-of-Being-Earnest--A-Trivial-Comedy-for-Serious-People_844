@@ -50,7 +50,7 @@ deploy:
     - The-Importance-of-Being-Earnest-A-Trivial-Comedy-for-Serious-People.mobi
     - The-Importance-of-Being-Earnest-A-Trivial-Comedy-for-Serious-People.pdf
   "on":
-    repo: GITenberg/The-Importance-of-Being-Earnest-A-Trivial-Comedy-for-Serious-People_844
+    repo: GITenberg/The-Importance-of-Being-Earnest--A-Trivial-Comedy-for-Serious-People_844
 addons:
   apt:
     packages:
